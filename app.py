@@ -282,33 +282,19 @@ with col2:
 # Visual comparison
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-# Bacteria probability distribution (from test set)
-# axes[0].hist(y_te_proba[y_te==1], bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
-# axes[0].hist(y_te_proba[y_te==0], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
-# axes[0].set_title('Bacteria (In-Domain)\nClear separation')
-# axes[0].set_xlabel('Predicted Promoter Probability')
-# axes[0].set_ylabel('Count')
-# axes[0].legend()
-
 axes[0].hist(viz_data['bacteria_promoter_probs'],    bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
 axes[0].hist(viz_data['bacteria_nonpromoter_probs'], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
-axes[0].hist(viz_data['bacteria_promoter_probs'],    bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
-axes[0].hist(viz_data['bacteria_nonpromoter_probs'], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
-axes[0].set_title('Bacteria (In-Domain)\nClear separation')   # ← add this
-axes[0].set_xlabel('Predicted Promoter Probability')           # ← add this
-axes[0].set_ylabel('Count')                                    # ← add this
-axes[0].legend()                                               # ← add this
-# axes[1].hist(viz_data['archaea_promoter_probs'],     bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
-# axes[1].hist(viz_data['archaea_nonpromoter_probs'],  bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
+axes[0].set_title('Bacteria (In-Domain)\nClear separation')
+axes[0].set_xlabel('Predicted Promoter Probability')
+axes[0].set_ylabel('Count')
+axes[0].legend(loc='upper center')  # forces single legend
 
-# Archaea probability distribution
-# Line 292-293 — replace with:
 axes[1].hist(viz_data['archaea_promoter_probs'],    bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
 axes[1].hist(viz_data['archaea_nonpromoter_probs'], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
 axes[1].set_title('Archaea (Cross-Domain)\nDistributions overlap')
 axes[1].set_xlabel('Predicted Promoter Probability')
 axes[1].set_ylabel('Count')
-axes[1].legend()
+axes[1].legend(loc='upper center')
 
 plt.tight_layout()
 st.pyplot(fig)
