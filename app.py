@@ -150,17 +150,24 @@ with col1:
 if predict_btn:
     seq = seq_input.strip().upper().replace(" ", "").replace("\n", "")
 
-    # Validation
     if not seq:
         st.error("Please enter a sequence.")
-    elif len(seq) != 81:
-        st.error(f"Sequence must be exactly 81 bp. Yours is {len(seq)} bp.")
     elif set(seq) - set("ACGT"):
         bad = set(seq) - set("ACGT")
         st.error(f"Invalid characters found: {bad}. Only A, T, G, C allowed.")
+    elif len(seq) < 60:
+        st.error(f"Sequence too short ({len(seq)} bp). Minimum 60 bp required.")
     elif not models_loaded:
         st.error("Model files not found. Make sure stage1_xgb.pkl, stage2_xgb.pkl, and feature_names.pkl are in the same directory.")
     else:
+        # Auto-trim or pad to exactly 81bp
+        if len(seq) > 81:
+            seq = seq[:81]
+            st.info(f"Sequence trimmed to 81 bp.")
+        elif len(seq) < 81:
+            seq = seq + seq[-1] * (81 - len(seq))
+            st.info(f"Sequence padded to 81 bp.")
+
         with st.spinner("Analyzing sequence..."):
             prob, stage, shap_vals, X, feats = predict(seq)
 
@@ -285,8 +292,14 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
 axes[0].hist(viz_data['bacteria_promoter_probs'],    bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
 axes[0].hist(viz_data['bacteria_nonpromoter_probs'], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
-axes[1].hist(viz_data['archaea_promoter_probs'],     bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
-axes[1].hist(viz_data['archaea_nonpromoter_probs'],  bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
+axes[0].hist(viz_data['bacteria_promoter_probs'],    bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
+axes[0].hist(viz_data['bacteria_nonpromoter_probs'], bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
+axes[0].set_title('Bacteria (In-Domain)\nClear separation')   # ← add this
+axes[0].set_xlabel('Predicted Promoter Probability')           # ← add this
+axes[0].set_ylabel('Count')                                    # ← add this
+axes[0].legend()                                               # ← add this
+# axes[1].hist(viz_data['archaea_promoter_probs'],     bins=30, alpha=0.6, color='#e74c3c', label='Promoter')
+# axes[1].hist(viz_data['archaea_nonpromoter_probs'],  bins=30, alpha=0.6, color='#3498db', label='Non-Promoter')
 
 # Archaea probability distribution
 # Line 292-293 — replace with:
