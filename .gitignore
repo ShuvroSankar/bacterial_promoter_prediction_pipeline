@@ -4,3 +4,15 @@ __pycache__/
 .env
 .venv
 env/
+*.ipynb
+!HybProm.ipynb
+my_file_list.txt
+shap_*.png
+xgboost_*.model
+Datasets/
+predictions_bacteria/
+FINAL_PROJECT/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.DS_Store
